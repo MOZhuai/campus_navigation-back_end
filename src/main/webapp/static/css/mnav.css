@@ -1,0 +1,94 @@
+*{
+    /*margin:外边距*/
+    margin: 0;
+    /*padding:内边距*/
+    padding: 0;
+    font-family: "Arial", sans-serif;
+}
+.header{
+    height: 100px;
+    background: #6F1E51;
+    padding: 0 20px;
+    color: #FFFFFF;
+}
+.logo{
+    /*line-height:属性设置行间的距离(行高)*/
+    line-height: 100px;
+    float: left;
+    /*text-transform:控制文本的大小写*/
+    text-transform: none;
+}
+.menu{
+    float: right;
+    line-height: 100px;
+}
+.menu a{
+    color: #FFFFFF;
+    text-transform: none;
+    /*text-decoration:文本的修饰*/
+    text-decoration: none;
+    padding: 0 10px;
+    /*transition:转变时间*/
+    transition: 0.4s;
+}
+.show-menu-btn,.hide-menu-btn{
+    transition: 0.4s;
+    font-size: 30px;
+    /*cursor:光标样式*/
+    cursor: pointer;
+    display: none;
+}
+.show-menu-btn{
+    float: right;
+}
+.show-menu-btn i{
+    line-height: 100px;
+}
+.content{
+    padding: 30px;
+    line-height: 30px;
+    font-family: "Arial", sans-serif;
+    color: #2d3436;
+}
+/*hover:鼠标指针浮动在其上的元素，并设置其样式*/
+.menu a:hover,
+.show-menu-btn:hover,
+.hide-menu-btn:hover{
+    color: #FDA7DF;
+}
+#chk{
+    position: absolute;
+    visibility: hidden;
+    z-index:  -1111;
+}
+/*@media:对不同的媒体类型定义不同的样式*/
+@media screen and (max-width: 800px) {
+    .show-menu-btn,.hide-menu-btn{
+        display: block;
+    }
+    .menu{
+        /*position:定位元素*/
+        position: fixed;
+        width: 60%;
+        height: 100vh;
+        background: #333333;
+        right: -100%;
+        top: 0;
+        text-align: center;
+        padding: 80px 0;
+        line-height: normal;
+        transition: 0.7s;
+    }
+    .menu a{
+        display: block;
+        padding: 20px;
+    }
+    .hide-menu-btn{
+        position: absolute;
+        top: 40px;
+        right: 40px;
+    }
+    #chk:checked ~ .menu{
+        right: 0;
+    }
+}

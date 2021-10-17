@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobile.dao.RoadMapper">
+  <resultMap id="BaseResultMap" type="com.mobile.bean.Road">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="start_pk" jdbcType="INTEGER" property="startPk" />
+    <result column="end_pk" jdbcType="INTEGER" property="endPk" />
+    <result column="rbuilding" jdbcType="INTEGER" property="rbuilding" />
+  </resultMap>
+  <resultMap id="ResultMapWithPKInfo" type="com.mobile.bean.Road">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="start_pk" jdbcType="INTEGER" property="startPk" />
+    <result column="end_pk" jdbcType="INTEGER" property="endPk" />
+    <result column="rbuilding" jdbcType="INTEGER" property="rbuilding" />
+    <association property="startKeyPoint" javaType="com.mobile.bean.KeyPoint">
+        <id column="pk1_id" jdbcType="INTEGER" property="id" />
+        <result column="pk1_pname" jdbcType="VARCHAR" property="pname" />
+        <result column="pk1_x" jdbcType="VARCHAR" property="x" />
+        <result column="pk1_y" jdbcType="VARCHAR" property="y" />
+        <result column="pk1_z" jdbcType="VARCHAR" property="z" />
+        <result column="pk1_ptype" jdbcType="INTEGER" property="ptype" />
+        <result column="pk1_pbuilding" jdbcType="INTEGER" property="pbuilding" />
+    </association>
+    <association property="endKeyPoint" javaType="com.mobile.bean.KeyPoint">
+      <id column="pk2_id" jdbcType="INTEGER" property="id" />
+      <result column="pk2_pname" jdbcType="VARCHAR" property="pname" />
+      <result column="pk2_x" jdbcType="VARCHAR" property="x" />
+      <result column="pk2_y" jdbcType="VARCHAR" property="y" />
+      <result column="pk2_z" jdbcType="VARCHAR" property="z" />
+      <result column="pk2_ptype" jdbcType="INTEGER" property="ptype" />
+      <result column="pk2_pbuilding" jdbcType="INTEGER" property="pbuilding" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, start_pk, end_pk, rbuilding
+  </sql>
+  <sql id="Building_Column_List">
+    r.id, start_pk, end_pk, rbuilding,
+    pk1.id pk1_id, pk1.pname pk1_pname, pk1.x pk1_x, pk1.y pk1_y, pk1.z pk1_z, pk1.ptype pk1_ptype, pk1.pbuilding pk1_pbuilding,
+    pk2.id pk2_id, pk2.pname pk2_pname, pk2.x pk2_x, pk2.y pk2_y, pk2.z pk2_z, pk2.ptype pk2_ptype, pk2.pbuilding pk2_pbuilding
+  </sql>
+  <select id="selectByExample" parameterType="com.mobile.bean.RoadExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from road
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from road
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByBuilding" parameterType="java.lang.String" resultMap="ResultMapWithPKInfo">
+    select
+    <include refid="Building_Column_List" />
+    from road r
+    join key_point pk1, key_point pk2
+    where start_pk=pk1.id and end_pk=pk2.id and rbuilding = (select id from building where bname = #{name,jdbcType=VARCHAR})
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from road
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.mobile.bean.RoadExample">
+    delete from road
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.mobile.bean.Road">
+    insert into road (id, start_pk, end_pk, 
+      rbuilding)
+    values (#{id,jdbcType=INTEGER}, #{startPk,jdbcType=INTEGER}, #{endPk,jdbcType=INTEGER}, 
+      #{rbuilding,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mobile.bean.Road">
+    insert into road
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="startPk != null">
+        start_pk,
+      </if>
+      <if test="endPk != null">
+        end_pk,
+      </if>
+      <if test="rbuilding != null">
+        rbuilding,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="startPk != null">
+        #{startPk,jdbcType=INTEGER},
+      </if>
+      <if test="endPk != null">
+        #{endPk,jdbcType=INTEGER},
+      </if>
+      <if test="rbuilding != null">
+        #{rbuilding,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.mobile.bean.RoadExample" resultType="java.lang.Long">
+    select count(*) from road
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update road
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.startPk != null">
+        start_pk = #{record.startPk,jdbcType=INTEGER},
+      </if>
+      <if test="record.endPk != null">
+        end_pk = #{record.endPk,jdbcType=INTEGER},
+      </if>
+      <if test="record.rbuilding != null">
+        rbuilding = #{record.rbuilding,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update road
+    set id = #{record.id,jdbcType=INTEGER},
+      start_pk = #{record.startPk,jdbcType=INTEGER},
+      end_pk = #{record.endPk,jdbcType=INTEGER},
+      rbuilding = #{record.rbuilding,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mobile.bean.Road">
+    update road
+    <set>
+      <if test="startPk != null">
+        start_pk = #{startPk,jdbcType=INTEGER},
+      </if>
+      <if test="endPk != null">
+        end_pk = #{endPk,jdbcType=INTEGER},
+      </if>
+      <if test="rbuilding != null">
+        rbuilding = #{rbuilding,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mobile.bean.Road">
+    update road
+    set start_pk = #{startPk,jdbcType=INTEGER},
+      end_pk = #{endPk,jdbcType=INTEGER},
+      rbuilding = #{rbuilding,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
