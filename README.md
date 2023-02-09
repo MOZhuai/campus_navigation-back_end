@@ -22,13 +22,13 @@
 
 ### 二、  数据库配置
 
-​	文件路径：`\数据库文件\ schoolNav.sql`
+​	文件路径：`\数据库文件\schoolNav.sql`
 
 ​	该文件包含建库、建表语句，通过mysql调用该文件即可。
 
 ### 三、  后台项目部署说明
 
-​	文件路径：`\后台项目文件\ mobileapp`
+​	文件路径：`\后台项目文件\mobileapp`
 
 ​	打开项目后，需要配置数据库信息，数据库配置文件位于`\mobileapp\src\main\resources\dbconfig.properties`，将四项配置信息替换后，导出war包并置于tomcat服务器中运行，或在配置好tomcat 的Intellij IDEA中直接运行即可。
 
@@ -46,6 +46,6 @@
 
 ### 六、  校园管理员端部署说明
 
-​	项目路径：“\校园管理端\SchoolNavigation”
+​	项目路径：`\校园管理端\SchoolNavigation`
 
-​	该部分为前端页面，部署时可按需配置后台请求的IP，项目文件中默认为localhost，配置信息位于“\SchoolNavigation\js\index.js”第一行。
+​	该部分为前端页面，部署时可按需配置后台请求的IP，项目文件中默认为localhost，配置信息位于`\SchoolNavigation\js\index.js`第一行。
